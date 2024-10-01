@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký và Đăng nhập</title>
+    <style>
+        .protected-folder, .login-form, .register-form {
+            display: none;
+            margin-top: 10px;
+        }
+        .form {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let approvedUsers = [];
+
+        function register() {
+            let username = document.getElementById("reg-username").value;
+            let password = document.getElementById("reg-password").value;
+            
+            // Lưu người đăng ký
+            localStorage.setItem(username, password);
+            alert("Đăng ký thành công! Chờ phê duyệt để truy cập.");
+        }
+
+        function login() {
+            let username = document.getElementById("login-username").value;
+            let password = document.getElementById("login-password").value;
+            
+            // Kiểm tra phê duyệt và đăng nhập
+            if (approvedUsers.includes(username) && localStorage.getItem(username) === password) {
+                document.getElementById("protected-folder").style.display = "block";
+                document.getElementById("login-form").style.display = "none";
+            } else {
+                alert("Tài khoản chưa được phê duyệt hoặc sai mật khẩu!");
+            }
+        }
+
+        function showRegisterForm() {
+            document.getElementById("register-form").style.display = "block";
+            document.getElementById("login-form").style.display = "none";
+        }
+
+        function showLoginForm() {
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("register-form").style.display = "none";
+        }
+        
+        // Thêm một người dùng vào danh sách phê duyệt (giả sử admin đã phê duyệt)
+        function approveUser() {
+            let username = prompt("Nhập tên người dùng cần phê duyệt:");
+            if (localStorage.getItem(username)) {
+                approvedUsers.push(username);
+                alert(username + " đã được phê duyệt!");
+            } else {
+                alert("Tài khoản không tồn tại!");
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h1>Trang Đăng ký & Đăng nhập</h1>
+
+<button onclick="showRegisterForm()">Đăng ký</button>
+<button onclick="showLoginForm()">Đăng nhập</button>
+<button onclick="approveUser()">Phê duyệt người dùng</button>
+
+<div id="register-form" class="form">
+    <h2>Đăng ký</h2>
+    <label for="reg-username">Tên người dùng:</label>
+    <input type="text" id="reg-username" name="username"><br><br>
+    <label for="reg-password">Mật khẩu:</label>
+    <input type="password" id="reg-password" name="password"><br><br>
+    <button onclick="register()">Đăng ký</button>
+</div>
+
+<div id="login-form" class="form">
+    <h2>Đăng nhập</h2>
+    <label for="login-username">Tên người dùng:</label>
+    <input type="text" id="login-username" name="username"><br><br>
+    <label for="login-password">Mật khẩu:</label>
+    <input type="password" id="login-password" name="password"><br><br>
+    <button onclick="login()">Đăng nhập</button>
+</div>
+
+<div id="protected-folder" class="protected-folder">
+    <h2>Nội dung được bảo vệ</h2>
+    <ul>
+        <li>Tài liệu bí mật 1</li>
+        <li>Tài liệu bí mật 2</li>
+    </ul>
+</div>
+
+</body>
+</html>
